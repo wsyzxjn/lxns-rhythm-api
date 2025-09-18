@@ -1,4 +1,4 @@
-# lxns-sdk
+# lxns-rhythm-api
 
 一个用于访问 Lxns API 的轻量 TypeScript SDK。
 
@@ -10,19 +10,19 @@
 
 ```bash
 # npm
-npm i lxns-sdk
+npm i lxns-rhythm-api
 
 # pnpm
-pnpm add lxns-sdk
+pnpm add lxns-rhythm-api
 
 # yarn
-yarn add lxns-sdk
+yarn add lxns-rhythm-api
 ```
 
 ## 快速开始
 
 ```ts
-import { LxnsApiClient } from "lxns-sdk";
+import { LxnsApiClient } from "lxns-rhythm-api";
 
 // 无 token：仅可用 public API
 const client = new LxnsApiClient();
@@ -68,6 +68,11 @@ new LxnsApiClient(options?: {
   - 基础路径：`<baseURL>/maimai/`。
 
 > 注意：`baseURL` 默认值为 `https://maimai.lxns.net/api/v0/`。
+
+## TODO
+
+- [ ] 支持 Chuni API
+- [x] 支持 Maimai API
 
 ## API 概览
 
