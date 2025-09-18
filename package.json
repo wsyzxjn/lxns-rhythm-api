@@ -2,7 +2,7 @@
   "name": "lxns-rhythm-api",
   "description": "A simple SDK for lxns api.",
   "author": "amatsuka <amatsukamao@qq.com>",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/wsyzxjn/lxns-rhythm-api.git"
@@ -31,7 +31,7 @@
     "test": "tsx tests/index.ts",
     "build": "tsup",
     "build:production": "cross-env NODE_ENV=production tsup",
-    "prepublishOnly": "pnpm run prettier && pnpm run build:production"
+    "prepublishOnly": "pnpm run prettier && pnpm run build"
   },
   "devDependencies": {
     "@types/node": "^24.5.1",
