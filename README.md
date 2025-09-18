@@ -4,7 +4,7 @@
 
 - 零运行时依赖（仅使用 `ky` 发起请求）。
 - 类型安全：根据传入的 token 自动在 `maimai` 命名空间上暴露 `public` / `dev` / `personal` 子 API。
-- 现代构建（ESM/CJS/类型声明）。
+- 现代构建
 
 ## 安装
 
@@ -42,12 +42,6 @@ const personalClient = new LxnsApiClient({
 });
 const me = await personalClient.maimai.personal.getPlayer();
 console.log(me);
-```
-
-CommonJS 引用：
-
-```js
-const { LxnsApiClient } = require("lxns-sdk");
 ```
 
 ## 配置项

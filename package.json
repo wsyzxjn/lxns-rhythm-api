@@ -2,15 +2,14 @@
   "name": "lxns-rhythm-api",
   "description": "A simple SDK for lxns api.",
   "author": "amatsuka <amatsukamao@qq.com>",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/wsyzxjn/lxns-rhythm-api.git"
   },
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": "./dist/index.js"
     },
     "./package.json": "./package.json"
   },
@@ -22,7 +21,7 @@
   ],
   "packageManager": "pnpm@10.16.1",
   "type": "module",
-  "main": "./dist/index.cjs",
+  "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
