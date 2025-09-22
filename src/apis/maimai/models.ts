@@ -226,6 +226,7 @@ export type RateType =
   | "b"
   | "c"
   | "d";
+export type AssetType = "icon" | "plate" | "frame" | "jacket" | "music";
 
 // 成绩 Score
 export interface Score {

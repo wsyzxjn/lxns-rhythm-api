@@ -53,12 +53,17 @@ export class LxnsApiClient<O extends LxnsApiClientOptions> {
       : undefined;
 
     // 依据是否提供 token 挂载可用的子 API
-    const maimai: {
-      public: MaimaiPublicApi;
-      dev?: MaimaiDevApi;
-      personal?: MaimaiPersonalApi;
-    } = {
+    const maimai: Types.MaiMai = {
       public: new MaimaiPublicApi(httpPublic),
+      getAsset: async (type, id) => {
+        return Buffer.from(
+          await ky
+            .get(
+              `https://assets2.lxns.net/maimai/${type}/${id + (type === "music" ? ".mp3" : ".png")}`
+            )
+            .arrayBuffer()
+        );
+      },
     };
 
     if (httpDev) {

@@ -2,6 +2,7 @@ import type { MaimaiPublicApi } from "../apis/maimai/public.js";
 import type { MaimaiDevApi } from "../apis/maimai/dev.js";
 import type { MaimaiPersonalApi } from "../apis/maimai/personal.js";
 import type { LxnsApiClientOptions } from "./LxnsApiCLient.js";
+import type { AssetType } from "../apis/maimai/models.js";
 
 // Options 中仅与 token 相关的子集
 export type LxnsApiClientTokens = Omit<LxnsApiClientOptions, "baseURL">;
@@ -17,10 +18,16 @@ export type IfDefined<T, Then, Else = {}> = [T] extends [NonNullable<T>]
   ? Then
   : Else;
 
+export type MaiMai = {
+  public: MaimaiPublicApi;
+  dev?: MaimaiDevApi;
+  personal?: MaimaiPersonalApi;
+  getAsset: (type: AssetType, id: number) => Promise<Buffer>;
+};
+
 // 条件类型工厂：根据 Flags 自动计算 maimai 的形态
 export type MaiMaiOf<O extends Flags> = Simplify<
-  {
-    public: MaimaiPublicApi;
-  } & IfDefined<O["devAccessToken"], { dev: MaimaiDevApi }> &
+  Omit<MaiMai, "dev" | "personal"> &
+    IfDefined<O["devAccessToken"], { dev: MaimaiDevApi }> &
     IfDefined<O["personalAccessToken"], { personal: MaimaiPersonalApi }>
 >;
