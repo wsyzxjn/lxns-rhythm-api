@@ -6,7 +6,7 @@ import type * as Personal from "./types/personal.js";
  * maimai 个人 API（需用户身份，路径遵循文档）
  */
 export class MaimaiPersonalApi {
-  constructor(private readonly http: KyInstance) {}
+  constructor(public readonly http: KyInstance) {}
 
   /**
    * 获取玩家信息

@@ -1,12 +1,12 @@
-import type * as Public from "./types/public.js";
 import type { KyInstance } from "ky";
-import { Song } from "./entities/Song.js";
+import { Song } from "./entities/song.js";
+import type * as Public from "./types/public.js";
 
 /**
  * maimai 公共 API
  */
 export class MaimaiPublicApi {
-  constructor(private readonly http: KyInstance) {}
+  constructor(public readonly http: KyInstance) {}
 
   /**
    * 获取歌曲列表
@@ -47,7 +47,7 @@ export class MaimaiPublicApi {
    */
   async getCollectionList(
     collectionType: "trophy" | "icon" | "plate" | "frame",
-    options?: { version?: number; required?: boolean }
+    options?: { version?: number; required?: boolean },
   ) {
     const collectionMap = {
       trophy: "trophies",
@@ -58,7 +58,7 @@ export class MaimaiPublicApi {
     return this.http
       .get(`${collectionType}/list`, { searchParams: { ...options } })
       .json<Public.CollectionList>()
-      .then(res => res[collectionMap[collectionType]]);
+      .then((res) => res[collectionMap[collectionType]]);
   }
 
   /**
@@ -71,7 +71,7 @@ export class MaimaiPublicApi {
   async getCollectionInfo(
     collectionType: "trophy" | "icon" | "plate" | "frame",
     id: number,
-    options?: { version?: number }
+    options?: { version?: number },
   ) {
     return this.http
       .get(`${collectionType}/${id}`, { searchParams: { ...options } })

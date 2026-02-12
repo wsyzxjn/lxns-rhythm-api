@@ -6,7 +6,7 @@ import type * as Dev from "./types/dev.js";
  * maimai 开发者 API（路径风格，与文档一致，不使用查询参数）
  */
 export class MaimaiDevApi {
-  constructor(private readonly http: KyInstance) {}
+  constructor(public readonly http: KyInstance) {}
 
   /**
    * 创建或修改玩家信息
@@ -112,7 +112,7 @@ export class MaimaiDevApi {
   async getCollectionProgress(
     friendCode: number,
     collectionType: "trophy" | "icon" | "plate" | "frame",
-    collectionId: number
+    collectionId: number,
   ) {
     return this.http
       .get(`player/${friendCode}/${collectionType}/${collectionId}`)

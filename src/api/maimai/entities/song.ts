@@ -1,4 +1,4 @@
-import { type Song as SongModel, LevelIndex } from "../models.js";
+import type { LevelIndex, Song as SongModel } from "../models.js";
 
 const LevelArray = [
   "basic",
@@ -9,14 +9,14 @@ const LevelArray = [
 ] as const;
 
 function convertDifficulty<T extends { difficulty: LevelIndex }>(
-  difficulty: T[]
+  difficulty: T[],
 ) {
   return difficulty.reduce(
     (acc, cur) => {
       acc[LevelArray[cur.difficulty]] = cur;
       return acc;
     },
-    {} as Record<(typeof LevelArray)[number], T>
+    {} as Record<(typeof LevelArray)[number], T>,
   );
 }
 

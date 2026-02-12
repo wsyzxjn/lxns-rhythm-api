@@ -1,30 +1,43 @@
-import ky from "ky";
-import { MaimaiPublicApi } from "../apis/maimai/public.js";
-import { MaimaiDevApi } from "../apis/maimai/dev.js";
-import { MaimaiPersonalApi } from "../apis/maimai/personal.js";
-import type * as Types from "./types.js";
+import ky, { type Options } from "ky";
+import { MaimaiDevApi } from "../api/maimai/dev.js";
+import { MaimaiPersonalApi } from "../api/maimai/personal.js";
+import { MaimaiPublicApi } from "../api/maimai/public.js";
+import { LxnsApiError } from "../lxns-api-error.js";
+import type * as Types from "./client-types.js";
 
-export interface LxnsApiClientOptions {
-  personalAccessToken?: string;
-  devAccessToken?: string;
-  baseURL?: string;
+function parseLxnsJson(text: string) {
+  const payload = JSON.parse(text) as Types.ApiResponse;
+
+  if (payload.success === false) {
+    throw new LxnsApiError(payload);
+  }
+
+  if (payload.success === true) {
+    return payload.data;
+  }
+
+  return payload;
 }
 
+export type LxnsApiClientOptions = Types.LxnsApiClientOptions;
+
 export class LxnsApiClient<O extends LxnsApiClientOptions> {
-  public config: LxnsApiClientOptions & { baseURL: string } = {
-    baseURL: "https://maimai.lxns.net/api/v0/",
-  };
+  public config: LxnsApiClientOptions & { baseURL: string };
 
   /**
    * maimai API
    */
   public readonly maimai: Types.MaiMaiOf<O>;
 
+  private static readonly BASE_OPTIONS: Options = {
+    parseJson: parseLxnsJson,
+    throwHttpErrors: false,
+  };
+
   constructor(config?: Readonly<O>) {
     this.config = {
-      baseURL: config?.baseURL ?? this.config.baseURL,
-      personalAccessToken: config?.personalAccessToken,
-      devAccessToken: config?.devAccessToken,
+      ...config,
+      baseURL: config?.baseURL ?? "https://maimai.lxns.net/api/v0/",
     };
 
     const { baseURL, devAccessToken, personalAccessToken } = this.config;
@@ -32,6 +45,7 @@ export class LxnsApiClient<O extends LxnsApiClientOptions> {
     // 创建各域的 HTTP 客户端
     const httpPublic = ky.create({
       prefixUrl: new URL("maimai/", baseURL),
+      ...LxnsApiClient.BASE_OPTIONS,
     });
 
     const httpDev = devAccessToken
@@ -40,6 +54,7 @@ export class LxnsApiClient<O extends LxnsApiClientOptions> {
           headers: {
             Authorization: devAccessToken,
           },
+          ...LxnsApiClient.BASE_OPTIONS,
         })
       : undefined;
 
@@ -49,6 +64,7 @@ export class LxnsApiClient<O extends LxnsApiClientOptions> {
           headers: {
             "X-User-Token": personalAccessToken,
           },
+          ...LxnsApiClient.BASE_OPTIONS,
         })
       : undefined;
 
@@ -56,12 +72,12 @@ export class LxnsApiClient<O extends LxnsApiClientOptions> {
     const maimai: Types.MaiMai = {
       public: new MaimaiPublicApi(httpPublic),
       getAsset: async (type, id) => {
-        return Buffer.from(
+        return new Uint8Array(
           await ky
             .get(
-              `https://assets2.lxns.net/maimai/${type}/${id + (type === "music" ? ".mp3" : ".png")}`
+              `https://assets2.lxns.net/maimai/${type}/${id + (type === "music" ? ".mp3" : ".png")}`,
             )
-            .arrayBuffer()
+            .arrayBuffer(),
         );
       },
     };

@@ -1,5 +1,5 @@
-import { LxnsApiClient } from "../dist/index.js";
 import fs from "node:fs/promises";
+import { LxnsApiClient } from "../dist/index.js";
 
 const client = new LxnsApiClient();
 

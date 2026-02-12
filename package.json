@@ -25,21 +25,17 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "lint": "eslint --ext .ts,.js src",
-    "prettier": "prettier --write 'src/**/*.ts'",
+    "check": "biome check",
+    "fix": "biome check --write",
     "test": "tsx tests/index.ts",
+    "test:beta": "tsx tests/beta.ts",
     "build": "tsup",
     "build:production": "cross-env NODE_ENV=production tsup",
-    "prepublishOnly": "pnpm run prettier && pnpm run build"
+    "prepublishOnly": "pnpm run fix && pnpm run build"
   },
   "devDependencies": {
     "@types/node": "^24.5.1",
-    "@typescript-eslint/eslint-plugin": "^8.44.0",
-    "@typescript-eslint/parser": "^8.44.0",
     "cross-env": "^10.0.0",
-    "eslint": "^9.35.0",
-    "eslint-config-prettier": "^10.1.8",
-    "prettier": "^3.6.2",
     "tsup": "^8.5.0",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2"

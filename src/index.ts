@@ -1,3 +1,11 @@
-export * as MaimaiModels from "./apis/maimai/models.js";
+export * as MaimaiModels from "./api/maimai/models.js";
 
-export { LxnsApiClient } from "./client/LxnsApiCLient.js";
+export { LxnsApiClient } from "./client/lxns-api-client.js";
+export {
+  isAuthError,
+  isLxnsApiError,
+  isNotFoundError,
+  isRateLimitError,
+  isServerError,
+  LxnsApiError,
+} from "./lxns-api-error.js";
