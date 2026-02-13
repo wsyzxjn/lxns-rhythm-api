@@ -6,9 +6,9 @@ const isProduction = process.env.NODE_ENV === "production";
 const DEFAULT_CONFIG: Options = {
   entry: ["src/index.ts"],
   dts: true,
-  minify: isProduction,
   clean: true,
   outDir: "dist",
+  sourcemap: !isProduction,
   skipNodeModulesBundle: true,
 };
 

@@ -3,9 +3,10 @@
   "description": "A simple SDK for lxns api.",
   "keywords": [
     "lxns",
+    "lxns-api",
     "maimai",
+    "maimai-dx",
     "chunithm",
-    "rhythm-game",
     "sdk",
     "typescript",
     "api-client"
@@ -37,13 +38,15 @@
   "scripts": {
     "check": "biome check",
     "fix": "biome check --write",
+    "typecheck": "tsc --noEmit",
     "test": "tsx tests/index.ts",
     "test:beta": "tsx tests/beta.ts",
     "build": "tsup",
     "build:production": "cross-env NODE_ENV=production tsup",
-    "prepublishOnly": "pnpm run fix && pnpm run build"
+    "prepublishOnly": "pnpm run fix && pnpm run typecheck && pnpm run build:production"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.3.15",
     "@types/node": "^24.5.1",
     "cross-env": "^10.0.0",
     "tsup": "^8.5.0",
