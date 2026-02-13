@@ -1,3 +1,7 @@
+import type { ChunithmDevApi } from "../api/chunithm/dev.js";
+import type { AssetType as ChunithmAssetType } from "../api/chunithm/models.js";
+import type { ChunithmPersonalApi } from "../api/chunithm/personal.js";
+import type { ChunithmPublicApi } from "../api/chunithm/public.js";
 import type { MaimaiDevApi } from "../api/maimai/dev.js";
 import type { AssetType } from "../api/maimai/models.js";
 import type { MaimaiPersonalApi } from "../api/maimai/personal.js";
@@ -18,22 +22,50 @@ export interface LxnsApiClientOptions {
   baseURL?: string;
 }
 
-type LxnsApiClientTokens = Omit<LxnsApiClientOptions, "baseURL">;
-type Flags = Readonly<LxnsApiClientTokens>;
-type Simplify<T> = { [K in keyof T]: T[K] } & {};
+export type LxnsApiClientTokenFlags = Readonly<
+  Omit<LxnsApiClientOptions, "baseURL">
+>;
+
 type IfDefined<T, Then, Else = object> = [T] extends [NonNullable<T>]
   ? Then
   : Else;
 
-export type MaiMai = {
-  public: MaimaiPublicApi;
-  dev?: MaimaiDevApi;
-  personal?: MaimaiPersonalApi;
+export type Simplify<T> = { [K in keyof T]: T[K] };
+
+export type GameApi<
+  O extends LxnsApiClientTokenFlags,
+  TPublic,
+  TDev,
+  TPersonal,
+  TExtra extends object = object,
+> = Simplify<
+  {
+    public: TPublic;
+  } & TExtra &
+    IfDefined<O["devAccessToken"], { dev: TDev }> &
+    IfDefined<O["personalAccessToken"], { personal: TPersonal }>
+>;
+
+export type MaimaiApiExtra = {
   getAsset: (type: AssetType, id: number) => Promise<Uint8Array>;
 };
 
-export type MaiMaiOf<O extends Flags> = Simplify<
-  Omit<MaiMai, "dev" | "personal"> &
-    IfDefined<O["devAccessToken"], { dev: MaimaiDevApi }> &
-    IfDefined<O["personalAccessToken"], { personal: MaimaiPersonalApi }>
+export type MaimaiApiOf<O extends LxnsApiClientTokenFlags> = GameApi<
+  O,
+  MaimaiPublicApi,
+  MaimaiDevApi,
+  MaimaiPersonalApi,
+  MaimaiApiExtra
+>;
+
+export type ChunithmApiExtra = {
+  getAsset: (type: ChunithmAssetType, id: number) => Promise<Uint8Array>;
+};
+
+export type ChunithmApiOf<O extends LxnsApiClientTokenFlags> = GameApi<
+  O,
+  ChunithmPublicApi,
+  ChunithmDevApi,
+  ChunithmPersonalApi,
+  ChunithmApiExtra
 >;

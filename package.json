@@ -1,8 +1,18 @@
 {
   "name": "lxns-rhythm-api",
   "description": "A simple SDK for lxns api.",
+  "keywords": [
+    "lxns",
+    "maimai",
+    "chunithm",
+    "rhythm-game",
+    "sdk",
+    "typescript",
+    "api-client"
+  ],
   "author": "amatsuka <amatsukamao@qq.com>",
   "version": "0.1.4",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/wsyzxjn/lxns-rhythm-api.git"

@@ -1,10 +1,13 @@
 # lxns-rhythm-api
 
-一个用于访问 Lxns API 的轻量 TypeScript SDK。
+一个面向 [落雪咖啡屋查分器](https://maimai.lxns.net/) 的 TypeScript SDK，当前支持 `maimai` 与 `chunithm`。
 
-- 零运行时依赖（仅使用 `ky` 发起请求）。
-- 类型安全：根据传入的 token 自动在 `maimai` 命名空间上暴露 `public` / `dev` / `personal` 子 API。
-- 现代构建
+## 特性
+
+- 基于 `ky` 的轻量 HTTP 客户端。
+- 统一的 `public / dev / personal` 命名空间。
+- 完善的类型支持，根据是否传入 token 自动推断可用 API 类型。
+- 统一错误类型：`LxnsApiError`。
 
 ## 安装
 
@@ -24,73 +27,102 @@ yarn add lxns-rhythm-api
 ```ts
 import { LxnsApiClient } from "lxns-rhythm-api";
 
-// 无 token：仅可用 public API
-const client = new LxnsApiClient();
-const song = await client.maimai.public.getSong(114);
-console.log(song.standard?.master);
-
-// 开发者 API：传入 devAccessToken 后可用 maimai.dev
-const devClient = new LxnsApiClient({
+const client = new LxnsApiClient({
   devAccessToken: "<your-dev-token>",
-});
-const player = await devClient.maimai.dev.getPlayerByQQ(1507524536);
-console.log(player);
-
-// 个人 API：传入 personalAccessToken 后可用 maimai.personal
-const personalClient = new LxnsApiClient({
   personalAccessToken: "<your-personal-token>",
 });
-const me = await personalClient.maimai.personal.getPlayer();
-console.log(me);
+
+// maimai public
+const maimaiSong = await client.maimai.public.getSong(114);
+
+// maimai dev
+const maimaiPlayer = await client.maimai.dev.getPlayerByQQ(1234567890);
+
+// chunithm public
+const chunithmSong = await client.chunithm.public.getSong(1);
+
+// chunithm personal
+const me = await client.chunithm.personal.getPlayer();
 ```
 
-## 配置项
-
-构造函数签名：
+## 配置
 
 ```ts
-new LxnsApiClient(options?: {
+new LxnsApiClient({
   personalAccessToken?: string;
   devAccessToken?: string;
-  baseURL?: string; // 默认：https://maimai.lxns.net/api/v0/
+  baseURL?: string; // 默认: https://maimai.lxns.net/api/v0/
 });
 ```
 
-- 当提供 `devAccessToken` 时：
-  - SDK 会在 `maimai.dev` 命名空间下启用开发者接口。
-  - 认证头：`Authorization: <devAccessToken>`。
-  - 基础路径：`<baseURL>/maimai/`。
-- 当提供 `personalAccessToken` 时：
-  - SDK 会在 `maimai.personal` 命名空间下启用个人接口。
-  - 认证头：`X-User-Token: <personalAccessToken>`。
-  - 基础路径：`<baseURL>/user/maimai/`。
-- `public` 始终可用：
-  - 基础路径：`<baseURL>/maimai/`。
+- `devAccessToken`：启用 `*.dev` 命名空间。
+- `personalAccessToken`：启用 `*.personal` 命名空间。
+- `baseURL`：默认 `https://maimai.lxns.net/api/v0/`。
 
-> 注意：`baseURL` 默认值为 `https://maimai.lxns.net/api/v0/`。
+## 资源接口
 
-## TODO
+两个游戏命名空间都提供：
 
-- [ ] 支持 Chuni API
-- [x] 支持 Maimai API
+- `getAsset(type, id): Promise<Uint8Array>`
 
-## API 概览
+示例：
 
-- `maimai.public`
-  - `getSongList(version?: number, notes?: boolean)`
-  - `getSong(id: number)`
-  - `getAliasList()`
-  - `getCollectionList(type, options)` 等
-- `maimai.dev`（需 `devAccessToken`）
-  - `getPlayer(friendCode)`、`getPlayerByQQ(qq)`、`getBests(...)` 等
-- `maimai.personal`（需 `personalAccessToken`）
-  - `getPlayer()`、`getScores()`、`postScores(scores)` 等
+```ts
+const jacket = await client.maimai.getAsset("jacket", 114);
+const icon = await client.chunithm.getAsset("icon", 1);
+```
 
-详细定义请参见源码：
+## 错误处理
 
-- `src/apis/maimai/public.ts`
-- `src/apis/maimai/dev.ts`
-- `src/apis/maimai/personal.ts`
+SDK 会将 API 错误统一抛为 `LxnsApiError`。
+
+```ts
+import {
+  LxnsApiError,
+  isAuthError,
+  isNotFoundError,
+  isRateLimitError,
+  isServerError,
+} from "lxns-rhythm-api";
+
+try {
+  await client.maimai.dev.getPlayer(1234567890);
+} catch (error) {
+  if (error instanceof LxnsApiError) {
+    console.error(error.code, error.status, error.message);
+  }
+
+  if (isNotFoundError(error)) {
+    // 404
+  }
+  if (isAuthError(error)) {
+    // 401 / 403
+  }
+  if (isRateLimitError(error)) {
+    // 429
+  }
+  if (isServerError(error)) {
+    // >= 500
+  }
+}
+```
+
+## 导出
+
+```ts
+import {
+  LxnsApiClient,
+  LxnsApiError,
+  isLxnsApiError,
+  MaimaiModels,
+  ChunithmModels,
+} from "lxns-rhythm-api";
+```
+
+## 相关文档
+
+- [Lxns maimai API](https://maimai.lxns.net/docs/api/maimai)
+- [Lxns chunithm API](https://maimai.lxns.net/docs/api/chunithm)
 
 ## 构建与测试
 
@@ -99,6 +131,6 @@ pnpm run build
 pnpm run test
 ```
 
-## 许可
+## License
 
 MIT
