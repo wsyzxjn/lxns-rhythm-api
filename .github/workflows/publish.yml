@@ -29,4 +29,4 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Publish with prepublishOnly
-        run: pnpm publish
+        run: pnpm publish --no-git-checks
