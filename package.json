@@ -46,7 +46,7 @@
     "prepublishOnly": "pnpm run fix && pnpm run typecheck && pnpm run build:production"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.15",
+    "@biomejs/biome": "2.3.11",
     "@types/node": "^24.5.1",
     "cross-env": "^10.0.0",
     "tsup": "^8.5.0",
