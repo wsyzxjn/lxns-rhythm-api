@@ -8,15 +8,33 @@ const LevelArray = [
   "remaster",
 ] as const;
 
+type DifficultyMap<T> = {
+  0: T;
+  1: T;
+  2: T;
+  3: T;
+  4?: T;
+  basic: T;
+  advanced: T;
+  expert: T;
+  master: T;
+  remaster?: T;
+};
+
 function convertDifficulty<T extends { difficulty: LevelIndex }>(
   difficulty: T[],
 ) {
-  return difficulty.reduce(
+  const sortedDifficulty = [...difficulty].sort(
+    (a, b) => a.difficulty - b.difficulty,
+  );
+
+  return sortedDifficulty.reduce<DifficultyMap<T>>(
     (acc, cur) => {
+      acc[cur.difficulty] = cur;
       acc[LevelArray[cur.difficulty]] = cur;
       return acc;
     },
-    {} as Record<(typeof LevelArray)[number], T>,
+    {} as DifficultyMap<T>,
   );
 }
 
@@ -58,8 +76,10 @@ export class Song implements SongModel {
   }
 
   get utage() {
-    if (!this.difficulties.utage) return null;
+    if (!this.difficulties.utage || this.difficulties.utage.length === 0) {
+      return null;
+    }
 
-    return convertDifficulty(this.difficulties.utage);
+    return this.difficulties.utage;
   }
 }
