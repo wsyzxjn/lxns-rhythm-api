@@ -1,6 +1,6 @@
 import type { KyInstance } from "ky";
 import type { Player, Score } from "./models.js";
-import type * as Dev from "./types/dev.js";
+import type * as Dev from "./types/dev-types.js";
 
 /**
  * maimai 开发者 API（路径风格，与文档一致，不使用查询参数）

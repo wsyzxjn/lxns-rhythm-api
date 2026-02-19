@@ -1,4 +1,4 @@
-import type { ApiResponse, DataValue } from "./client/client-types.js";
+import type { ApiResponse, DataValue } from "./client/lxns-api-client-types.js";
 
 export class LxnsApiError extends Error {
   public readonly code: number;

@@ -1,6 +1,6 @@
 import type { KyInstance } from "ky";
 import type { LevelIndex, Player, Score } from "./models.js";
-import type * as Dev from "./types/dev.js";
+import type * as Dev from "./types/dev-types.js";
 
 /**
  * chunithm 开发者 API

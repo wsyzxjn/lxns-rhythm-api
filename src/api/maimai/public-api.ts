@@ -1,6 +1,6 @@
 import type { KyInstance } from "ky";
 import { Song } from "./entities/song.js";
-import type * as Public from "./types/public.js";
+import type * as Public from "./types/public-types.js";
 
 /**
  * maimai 公共 API

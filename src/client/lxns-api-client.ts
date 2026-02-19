@@ -1,56 +1,12 @@
-import ky, { type HTTPError, type Options } from "ky";
-import { ChunithmDevApi } from "../api/chunithm/dev.js";
-import { ChunithmPersonalApi } from "../api/chunithm/personal.js";
-import { ChunithmPublicApi } from "../api/chunithm/public.js";
-import { MaimaiDevApi } from "../api/maimai/dev.js";
-import { MaimaiPersonalApi } from "../api/maimai/personal.js";
-import { MaimaiPublicApi } from "../api/maimai/public.js";
-import { LxnsApiError } from "../lxns-api-error.js";
-import type * as Types from "./client-types.js";
-
-function parseLxnsJson(text: string) {
-  const payload = JSON.parse(text) as Types.ApiResponse;
-
-  if (payload.success === false) {
-    throw new LxnsApiError(payload);
-  }
-
-  if (payload.success === true) {
-    return payload.data;
-  }
-
-  return payload;
-}
-
-async function wrapKyError(error: HTTPError): Promise<HTTPError> {
-  const status = error.response.status;
-
-  try {
-    const payload = (await error.response
-      .clone()
-      .json()) as Partial<Types.ApiResponse>;
-    if (typeof payload.success === "boolean") {
-      throw new LxnsApiError(
-        {
-          success: payload.success,
-          code: payload.code ?? status,
-          message: payload.message ?? error.message,
-          data: payload.data,
-        },
-        status,
-      );
-    }
-  } catch {}
-
-  throw new LxnsApiError(
-    {
-      success: false,
-      code: status,
-      message: error.message,
-    },
-    status,
-  );
-}
+import ky from "ky";
+import { ChunithmDevApi } from "../api/chunithm/dev-api.js";
+import { ChunithmPersonalApi } from "../api/chunithm/personal-api.js";
+import { ChunithmPublicApi } from "../api/chunithm/public-api.js";
+import { MaimaiDevApi } from "../api/maimai/dev-api.js";
+import { MaimaiPersonalApi } from "../api/maimai/personal-api.js";
+import { MaimaiPublicApi } from "../api/maimai/public-api.js";
+import { LXNS_HTTP_OPTIONS } from "./http-options.js";
+import type * as Types from "./lxns-api-client-types.js";
 
 export type LxnsApiClientOptions = Types.LxnsApiClientOptions;
 
@@ -65,15 +21,6 @@ export class LxnsApiClient<O extends LxnsApiClientOptions> {
    * chunithm API
    */
   public readonly chunithm: Types.ChunithmApiOf<O>;
-
-  private static readonly BASE_OPTIONS: Options = {
-    parseJson: parseLxnsJson,
-    throwHttpErrors: true,
-    hooks: {
-      beforeError: [wrapKyError],
-    },
-  };
-
   private mountGameApi<
     TPublic,
     TDev,
@@ -117,7 +64,7 @@ export class LxnsApiClient<O extends LxnsApiClientOptions> {
     // 创建各域的 HTTP 客户端
     const maimaiHttpPublic = ky.create({
       prefixUrl: new URL("maimai/", baseURL),
-      ...LxnsApiClient.BASE_OPTIONS,
+      ...LXNS_HTTP_OPTIONS,
     });
 
     const maimaiHttpDev = devAccessToken
@@ -126,7 +73,7 @@ export class LxnsApiClient<O extends LxnsApiClientOptions> {
           headers: {
             Authorization: devAccessToken,
           },
-          ...LxnsApiClient.BASE_OPTIONS,
+          ...LXNS_HTTP_OPTIONS,
         })
       : undefined;
 
@@ -136,7 +83,7 @@ export class LxnsApiClient<O extends LxnsApiClientOptions> {
           headers: {
             "X-User-Token": personalAccessToken,
           },
-          ...LxnsApiClient.BASE_OPTIONS,
+          ...LXNS_HTTP_OPTIONS,
         })
       : undefined;
 
@@ -166,7 +113,7 @@ export class LxnsApiClient<O extends LxnsApiClientOptions> {
 
     const chunithmHttpPublic = ky.create({
       prefixUrl: new URL("chunithm/", baseURL),
-      ...LxnsApiClient.BASE_OPTIONS,
+      ...LXNS_HTTP_OPTIONS,
     });
 
     const chunithmHttpDev = devAccessToken
@@ -175,7 +122,7 @@ export class LxnsApiClient<O extends LxnsApiClientOptions> {
           headers: {
             Authorization: devAccessToken,
           },
-          ...LxnsApiClient.BASE_OPTIONS,
+          ...LXNS_HTTP_OPTIONS,
         })
       : undefined;
 
@@ -185,7 +132,7 @@ export class LxnsApiClient<O extends LxnsApiClientOptions> {
           headers: {
             "X-User-Token": personalAccessToken,
           },
-          ...LxnsApiClient.BASE_OPTIONS,
+          ...LXNS_HTTP_OPTIONS,
         })
       : undefined;
 

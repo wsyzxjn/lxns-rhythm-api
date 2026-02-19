@@ -1,5 +1,5 @@
 import type { KyInstance } from "ky";
-import type * as Public from "./types/public.js";
+import type * as Public from "./types/public-types.js";
 
 /**
  * chunithm 公共 API

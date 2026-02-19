@@ -1,11 +1,11 @@
-import type { ChunithmDevApi } from "../api/chunithm/dev.js";
+import type { ChunithmDevApi } from "../api/chunithm/dev-api.js";
 import type { AssetType as ChunithmAssetType } from "../api/chunithm/models.js";
-import type { ChunithmPersonalApi } from "../api/chunithm/personal.js";
-import type { ChunithmPublicApi } from "../api/chunithm/public.js";
-import type { MaimaiDevApi } from "../api/maimai/dev.js";
+import type { ChunithmPersonalApi } from "../api/chunithm/personal-api.js";
+import type { ChunithmPublicApi } from "../api/chunithm/public-api.js";
+import type { MaimaiDevApi } from "../api/maimai/dev-api.js";
 import type { AssetType } from "../api/maimai/models.js";
-import type { MaimaiPersonalApi } from "../api/maimai/personal.js";
-import type { MaimaiPublicApi } from "../api/maimai/public.js";
+import type { MaimaiPersonalApi } from "../api/maimai/personal-api.js";
+import type { MaimaiPublicApi } from "../api/maimai/public-api.js";
 
 export type DataValue = Record<string, unknown> | Array<unknown> | null;
 
