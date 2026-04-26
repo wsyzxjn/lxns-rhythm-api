@@ -1,5 +1,7 @@
 # lxns-rhythm-api
 
+[![npm](https://img.shields.io/npm/v/lxns-rhythm-api.svg)](https://www.npmjs.com/package/lxns-rhythm-api)
+
 一个面向 [落雪咖啡屋查分器](https://maimai.lxns.net/) 的 TypeScript SDK，当前支持 `maimai` 与 `chunithm`。
 
 ## 特性
