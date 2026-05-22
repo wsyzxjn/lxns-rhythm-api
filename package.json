@@ -20,8 +20,7 @@
   },
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
+      "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
     "./package.json": "./package.json"
@@ -34,9 +33,7 @@
   ],
   "packageManager": "pnpm@10.16.1",
   "type": "module",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index.d.cts",
   "scripts": {
     "check": "biome check",
     "fix": "biome check --write",
@@ -57,5 +54,10 @@
   },
   "dependencies": {
     "ky": "^1.10.0"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "inlinedDependencies": {
+    "ky": "1.10.0"
   }
 }

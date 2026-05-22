@@ -1,5 +1,5 @@
 import fs from "node:fs/promises";
-import { LxnsApiClient } from "../dist/index.js";
+import { LxnsApiClient } from "../dist/index.mjs";
 
 const client = new LxnsApiClient({
   devAccessToken: "",

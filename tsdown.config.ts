@@ -1,34 +1,19 @@
-import { defineConfig, type UserConfig } from "tsdown";
+import { defineConfig } from "tsdown";
 
 const isProduction = process.env.NODE_ENV === "production";
 
-const DEFAULT_CONFIG: UserConfig = {
-  entry: ["src/index.ts"],
-  outDir: "dist",
-  sourcemap: !isProduction,
-  outExtensions: ({ format }) => ({
-    js: format === "es" ? ".js" : ".cjs",
-  }),
-};
-
 export default defineConfig([
   {
-    ...DEFAULT_CONFIG,
-    format: "esm",
+    entry: ["src/index.ts"],
+    outDir: "dist",
+    sourcemap: !isProduction,
+    format: ["esm", "cjs"],
     clean: true,
     dts: true,
-    deps: {
-      neverBundle: ["ky"],
-    },
-  },
-  {
-    ...DEFAULT_CONFIG,
-    format: "cjs",
-    clean: false,
-    dts: false,
+    exports: true,
     deps: {
       alwaysBundle: ["ky"],
-      onlyBundle: false,
+      onlyBundle: ["ky"],
     },
   },
 ]);

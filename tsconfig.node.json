@@ -3,6 +3,7 @@
   "compilerOptions": {
     "composite": true,
     "rootDir": ".",
+    "tsBuildInfoFile": "node_modules/.cache/tsconfig.node.tsbuildinfo",
     "types": ["node"]
   },
   "include": ["tsdown.config.ts", "tests"]
