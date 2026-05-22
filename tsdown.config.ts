@@ -1,14 +1,14 @@
-// tsup.config.ts
-import { defineConfig, type Options } from "tsup";
+import { defineConfig, type UserConfig } from "tsdown";
 
 const isProduction = process.env.NODE_ENV === "production";
 
-const DEFAULT_CONFIG: Options = {
+const DEFAULT_CONFIG: UserConfig = {
   entry: ["src/index.ts"],
-  dts: true,
   outDir: "dist",
   sourcemap: !isProduction,
-  skipNodeModulesBundle: true,
+  outExtensions: ({ format }) => ({
+    js: format === "es" ? ".js" : ".cjs",
+  }),
 };
 
 export default defineConfig([
@@ -16,12 +16,19 @@ export default defineConfig([
     ...DEFAULT_CONFIG,
     format: "esm",
     clean: true,
+    dts: true,
+    deps: {
+      neverBundle: ["ky"],
+    },
   },
   {
     ...DEFAULT_CONFIG,
     format: "cjs",
     clean: false,
     dts: false,
-    noExternal: ["ky"],
+    deps: {
+      alwaysBundle: ["ky"],
+      onlyBundle: false,
+    },
   },
 ]);
