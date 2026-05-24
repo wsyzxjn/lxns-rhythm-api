@@ -38,7 +38,7 @@
     "check": "biome check",
     "fix": "biome check --write",
     "typecheck": "tsc --noEmit",
-    "test": "tsx tests/index.ts",
+    "test": "node --env-file-if-exists=.env --test tests/index.ts",
     "test:beta": "tsx tests/beta.ts",
     "build": "tsdown",
     "build:production": "cross-env NODE_ENV=production tsdown",

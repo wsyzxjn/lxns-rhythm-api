@@ -23,7 +23,7 @@ export class MaimaiPersonalApi {
    * @returns PlayerScores
    */
   async getScores() {
-    return this.http.get("scores").json<Personal.PlayerScores>();
+    return this.http.get("player/scores").json<Personal.PlayerScores>();
   }
 
   /**
@@ -35,7 +35,7 @@ export class MaimaiPersonalApi {
   async postScores(scores: Score[]) {
     const body: Personal.PostScoresRequest = { scores };
     return this.http
-      .post("scores", { json: body })
+      .post("player/scores", { json: body })
       .json<Personal.PostScoresResponse>();
   }
 }

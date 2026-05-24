@@ -21,7 +21,7 @@ export class ChunithmPersonalApi {
    * GET /api/v0/user/chunithm/player/scores
    */
   async getScores() {
-    return this.http.get("scores").json<Personal.PlayerScores>();
+    return this.http.get("player/scores").json<Personal.PlayerScores>();
   }
 
   /**
@@ -31,7 +31,7 @@ export class ChunithmPersonalApi {
   async postScores(scores: Score[]) {
     const body: Personal.PostScoresRequest = { scores };
     return this.http
-      .post("scores", { json: body })
+      .post("player/scores", { json: body })
       .json<Personal.PostScoresResponse>();
   }
 }
