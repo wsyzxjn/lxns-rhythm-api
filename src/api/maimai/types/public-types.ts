@@ -30,3 +30,12 @@ export interface CollectionGenreList {
 
 // CollectionGenre 信息
 export type CollectionGenreInfo = Models.CollectionGenre;
+
+export interface YearInReview {
+  game: string;
+  year: number;
+  latest_version: number;
+  player_name: string;
+  player_avatar_id: number;
+  [key: string]: unknown;
+}

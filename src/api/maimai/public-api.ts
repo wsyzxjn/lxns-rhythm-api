@@ -100,4 +100,20 @@ export class MaimaiPublicApi {
       .get(`collection-genre/${id}`, { searchParams: { ...options } })
       .json<Public.CollectionGenreInfo>();
   }
+
+  /**
+   * 获取公开分享的年度总结
+   * GET /api/v0/maimai/year-in-review/{year}/share/{shareToken}
+   */
+  async getYearInReviewShare(
+    year: number,
+    shareToken: string,
+    options?: { agree?: boolean },
+  ) {
+    return this.http
+      .get(`year-in-review/${year}/share/${shareToken}`, {
+        searchParams: { ...options },
+      })
+      .json<Public.YearInReview>();
+  }
 }

@@ -64,4 +64,20 @@ export class ChunithmPublicApi {
       .get(`${collectionType}/${id}`, { searchParams: { version } })
       .json<Public.CollectionInfo>();
   }
+
+  /**
+   * 获取公开分享的年度总结
+   * GET /api/v0/chunithm/year-in-review/{year}/share/{shareToken}
+   */
+  async getYearInReviewShare(
+    year: number,
+    shareToken: string,
+    options?: { agree?: boolean },
+  ) {
+    return this.http
+      .get(`year-in-review/${year}/share/${shareToken}`, {
+        searchParams: { ...options },
+      })
+      .json<Public.YearInReview>();
+  }
 }

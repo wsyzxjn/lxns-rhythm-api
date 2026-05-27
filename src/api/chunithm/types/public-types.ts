@@ -17,3 +17,12 @@ export type CollectionList = Partial<
 >;
 
 export type CollectionInfo = Models.Collection;
+
+export interface YearInReview {
+  game: string;
+  year: number;
+  latest_version: number;
+  player_name: string;
+  player_avatar_id: number;
+  [key: string]: unknown;
+}
