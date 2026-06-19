@@ -286,12 +286,12 @@ export interface SimpleScore {
 export interface RatingTrend {
   /** 总 DX Rating */
   total: number;
-  /** 旧版本谱面总 DX Rating */
-  standard: number;
-  /** 现版本谱面总 DX Rating */
-  dx: number;
+  /** 旧版本谱面总 DX Rating (B35) */
+  standard_total: number;
+  /** 现版本谱面总 DX Rating (B15) */
+  dx_total: number;
   /** 日期 */
-  date: string;
+  date: string | number;
 }
 
 // 简单的 Trophy/Icon/NamePlate/Frame 类型占位（可按需扩展字段）

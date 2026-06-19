@@ -85,10 +85,13 @@ export class MaimaiDevApi {
   /**
    * DX Rating 趋势
    * @param friendCode 好友码
+   * @param version 游戏版本（可选）
    * @returns TrendList
    */
-  async getTrend(friendCode: number) {
-    return this.http.get(`player/${friendCode}/trend`).json<Dev.TrendList>();
+  async getTrend(friendCode: number, version?: number) {
+    return this.http
+      .get(`player/${friendCode}/trend`, { searchParams: { version } })
+      .json<Dev.TrendList>();
   }
 
   /**

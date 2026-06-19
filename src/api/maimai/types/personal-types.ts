@@ -40,12 +40,8 @@ export type ScoreHistory = Models.Score[];
 
 export type Heatmap = Record<string, number>;
 
-export interface RatingTrend {
-  total: number;
-  standard_total: number;
-  dx_total: number;
-  date: string | number;
-}
+// DX Rating 趋势
+export type RatingTrend = Models.RatingTrend;
 
 export type PlayerCollectionListType =
   | "trophies"
