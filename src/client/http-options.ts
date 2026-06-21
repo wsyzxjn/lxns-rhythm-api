@@ -53,3 +53,47 @@ export const LXNS_HTTP_OPTIONS: Options = {
     beforeError: [wrapKyError],
   },
 };
+
+/** OAuth 2.0 错误响应体。 */
+interface OAuthErrorBody {
+  error: string;
+  error_description?: string;
+  error_uri?: string;
+}
+
+async function wrapOAuthError(error: HTTPError): Promise<HTTPError> {
+  const status = error.response.status;
+
+  let body: OAuthErrorBody | undefined;
+  try {
+    body = (await error.response.clone().json()) as OAuthErrorBody;
+  } catch {}
+
+  if (body && typeof body.error === "string") {
+    throw new LxnsApiError(
+      {
+        success: false,
+        code: status,
+        message: body.error_description ?? body.error,
+        data: { ...body },
+      },
+      status,
+    );
+  }
+
+  throw new LxnsApiError(
+    {
+      success: false,
+      code: status,
+      message: error.message,
+    },
+    status,
+  );
+}
+
+export const LXNS_OAUTH_TOKEN_HTTP_OPTIONS: Options = {
+  throwHttpErrors: true,
+  hooks: {
+    beforeError: [wrapOAuthError],
+  },
+};

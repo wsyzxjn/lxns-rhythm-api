@@ -6,7 +6,10 @@ import type {
   OAuthTokenResponse,
 } from "../api/oauth/oauth.js";
 import { OAuthAuthorizedApi } from "../api/oauth/oauth.js";
-import { LXNS_HTTP_OPTIONS } from "./http-options.js";
+import {
+  LXNS_HTTP_OPTIONS,
+  LXNS_OAUTH_TOKEN_HTTP_OPTIONS,
+} from "./http-options.js";
 
 export interface LxnsOAuthClientOptions {
   /** OAuth 应用的 client_id */
@@ -62,7 +65,7 @@ export class LxnsOAuthClient {
 
     this.http = ky.create({
       prefixUrl: new URL("oauth/", this.config.baseURL),
-      ...LXNS_HTTP_OPTIONS,
+      ...LXNS_OAUTH_TOKEN_HTTP_OPTIONS,
     });
   }
 
